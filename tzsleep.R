@@ -18,4 +18,16 @@ head(menu)
 summary(menu)
 
 ###plting###
+table(menu$Sleep.Disorder)
+table(menu$Stress.Level)
+plot(menu$Stress.Level, menu$Sleep.Duration)
+plot(menu$Stress.Level, menu$Quality.of.Sleep)
+
+###ggplots###
+plt1 <- ggplot(data =menu) +
+  geom_point(mapping = aes(x= Sleep.Duration, y=Quality.of.Sleep, color= Sleep.Disorder)) +
+  labs(title = "Sleep durationa and quality based on disorder", x= "sleep duration (hr)", y= "sleep quality" )
+plt1
+
+
 
