@@ -29,5 +29,9 @@ plt1 <- ggplot(data =menu) +
   labs(title = "Sleep durationa and quality based on disorder", x= "sleep duration (hr)", y= "sleep quality" )
 plt1
 
+plt2 <- ggplot(data = menu) +
+  geom_histogram(mapping = aes(x= Sleep.Duration), breaks = seq(from=0, to=12, by=1)) +
+  labs(title = "Sleep durationa count", x= "sleep duration (hr)", y= "hours" )
+plt2
 
 
