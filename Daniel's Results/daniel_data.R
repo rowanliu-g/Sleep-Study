@@ -1,0 +1,232 @@
+#Daniel's R File
+#Question: How does the presence of sleep disorder impact sleep duration
+# and subjective rating of quality of sleep?
+
+##### SETUP and Initial Exploring
+library(tidyverse)
+library(ggplot2)
+library(gridExtra)
+getwd()
+setwd("C:/Users/陈星怿/intersession_project/Sleep-Study/Daniel's Results")
+dataset <- read.csv("Sleep_health_and_lifestyle_dataset.csv")
+class(dataset)
+dim(dataset)
+head(dataset)
+
+##### Case 1: People with NO DISORDER
+#look at SLEEP DURATION and QUALITY OF SLEEP
+# cleanup
+duration <- dataset %>%
+  filter(Sleep.Disorder == "None") %>%
+  select(Sleep.Duration)
+
+quality <- dataset %>%
+  filter(Sleep.Disorder == "None") %>%
+  select(Quality.of.Sleep)
+
+# use ggplot to generate a box plot of duration, as its a continuous variable
+plot1 <- ggplot(data = duration) +
+  geom_boxplot(mapping = aes(x=, y=Sleep.Duration)) +
+  theme(axis.text.x = element_blank())+
+  labs(title = "Sleep Duration for People without Sleep Disorder", 
+       y = "Sleep Duration (Hours)")
+
+# then, use ggplot to generate a histogram of quality, as its a discrete variable
+histogram1 <- ggplot(data = quality) +
+  geom_histogram(mapping = aes(x=Quality.of.Sleep), 
+                 breaks = seq(from=3, to=10, by=1)) +
+  labs(title = "Sleep Quality for People without Sleep Disorder",
+       x = "Subjective Sleep Quality", y = "Number of People")
+
+# From original data, find min, Q1, median, Q3, max of duration
+# also find the mean
+quart_duration <- quantile(duration$Sleep.Duration, probs = c(0,0.25,0.5,0.75,1))
+mean_duration <- mean(duration$Sleep.Duration)
+# find min, Q1, median, Q3, max of quality
+# also find the mean
+quart_quality <- quantile(quality$Quality.of.Sleep, probs = c(0,0.25,0.5,0.75,1)) 
+mean_quality <- mean(quality$Quality.of.Sleep)
+
+# annotate these numbers on the plot, and save to a png file
+png("No_Disorder_Boxplot.png",  width = 10, height = 5, units = "in", res = 400)
+plot_none <- plot1 + 
+  geom_text(aes(label = paste0("Mean (Hours): ", round(mean_duration,2))),
+                      x = 0.15, y = 8.25) +
+  geom_text(aes(label = paste0("Maximum (Hours): " , quart_duration[5])), 
+            x = -0.25, y = 8.5) +
+  geom_text(aes(label = paste0("Quartile 3 (Hours): ", quart_duration[4])), 
+            x = -0.25, y = 8.25) +
+  geom_text(aes(label = paste0("Median (Hours): ", quart_duration[3])), 
+            x = -0.25, y = 8) +
+  geom_text(aes(label = paste0("Quartile 1 (Hours): ", quart_duration[2])), 
+            x = -0.25, y = 6.75) +
+  geom_text(aes(label = paste0("Minimum (Hours): ", quart_duration[1])), 
+            x = -0.25, y = 6.5)
+plot_none
+dev.off()
+
+# annotate numbers on histogram and save to a png
+png("No_Disorder_Histogram.png", width = 10, height = 5, units = "in", res = 400)
+histogram_none <- histogram1 +
+  geom_text(aes(label = paste0("Mean: ", round(mean_quality,2))),
+            x = 3.5, y = 100) +
+  geom_text(aes(label = paste0("Maximum: " , quart_quality[5])), 
+            x = 3.5, y = 90) +
+  geom_text(aes(label = paste0("Quartile 3: ", quart_quality[4])), 
+            x = 3.5, y = 80) +
+  geom_text(aes(label = paste0("Median: ", quart_quality[3])), 
+            x = 3.5, y = 70) +
+  geom_text(aes(label = paste0("Quartile 1: ", quart_quality[2])), 
+            x = 3.5, y = 60) +
+  geom_text(aes(label = paste0("Minimum: ", quart_quality[1])), 
+            x = 3.5, y = 50)
+histogram_none
+dev.off()
+
+##### Case 2: Study SLEEP APNEA
+# cleanup
+duration <- dataset %>%
+  filter(Sleep.Disorder == "Sleep Apnea") %>%
+  select(Sleep.Duration)
+
+quality <- dataset %>%
+  filter(Sleep.Disorder == "Sleep Apnea") %>%
+  select(Quality.of.Sleep)
+
+# use ggplot to generate a box plot of duration, as its a continuous variable
+plot2 <- ggplot(data = duration) +
+  geom_boxplot(mapping = aes(x=, y=Sleep.Duration)) +
+  theme(axis.text.x = element_blank())+
+  labs(title = "Sleep Duration for People with Sleep Apnea", 
+       y = "Sleep Duration (Hours)")
+
+# then, use ggplot to generate a histogram of quality, as its a discrete variable
+histogram2 <- ggplot(data = quality) +
+  geom_histogram(mapping = aes(x=Quality.of.Sleep), 
+                 breaks = seq(from=3, to=10, by=1)) +
+  labs(title = "Sleep Quality for People with Sleep Apnea",
+       x = "Subjective Sleep Quality", y = "Number of People")
+
+# From original data, find min, Q1, median, Q3, max of duration
+# also find the mean
+quart_duration <- quantile(duration$Sleep.Duration, probs = c(0,0.25,0.5,0.75,1))
+mean_duration <- mean(duration$Sleep.Duration)
+# find min, Q1, median, Q3, max of quality
+# also find the mean
+quart_quality <- quantile(quality$Quality.of.Sleep, probs = c(0,0.25,0.5,0.75,1)) 
+mean_quality <- mean(quality$Quality.of.Sleep)
+
+# annotate these numbers on the plot, and save to a png file
+png("Apnea_Boxplot.png",  width = 10, height = 5, units = "in", res = 400)
+plot_apnea <- plot2 + 
+  geom_text(aes(label = paste0("Mean (Hours): ", round(mean_duration,2))),
+            x = 0.15, y = 8.25) +
+  geom_text(aes(label = paste0("Maximum (Hours): " , quart_duration[5])), 
+            x = -0.25, y = 8.25) +
+  geom_text(aes(label = paste0("Quartile 3 (Hours): ", quart_duration[4])), 
+            x = -0.25, y = 8) +
+  geom_text(aes(label = paste0("Median (Hours): ", quart_duration[3])), 
+            x = -0.25, y = 7.75) +
+  geom_text(aes(label = paste0("Quartile 1 (Hours): ", quart_duration[2])), 
+            x = -0.25, y = 7.5) +
+  geom_text(aes(label = paste0("Minimum (Hours): ", quart_duration[1])), 
+            x = -0.25, y = 7.25)
+plot_apnea
+dev.off()
+
+# annotate numbers on histogram and save to a png
+png("Apnea_Histogram.png", width = 10, height = 5, units = "in", res = 400)
+histogram_apnea <- histogram2 +
+  geom_text(aes(label = paste0("Mean: ", round(mean_quality,2))),
+            x = 3.5, y = 30) +
+  geom_text(aes(label = paste0("Maximum: " , quart_quality[5])), 
+            x = 3.5, y = 26) +
+  geom_text(aes(label = paste0("Quartile 3: ", quart_quality[4])), 
+            x = 3.5, y = 22) +
+  geom_text(aes(label = paste0("Median: ", quart_quality[3])), 
+            x = 3.5, y = 18) +
+  geom_text(aes(label = paste0("Quartile 1: ", quart_quality[2])), 
+            x = 3.5, y = 14) +
+  geom_text(aes(label = paste0("Minimum: ", quart_quality[1])), 
+            x = 3.5, y = 10)
+histogram_apnea
+dev.off()
+
+##### Case 3: Study INSOMNIA
+# cleanup
+duration <- dataset %>%
+  filter(Sleep.Disorder == "Insomnia") %>%
+  select(Sleep.Duration)
+
+quality <- dataset %>%
+  filter(Sleep.Disorder == "Insomnia") %>%
+  select(Quality.of.Sleep)
+
+# use ggplot to generate a box plot of duration, as its a continuous variable
+plot3 <- ggplot(data = duration) +
+  geom_boxplot(mapping = aes(x=, y=Sleep.Duration)) +
+  theme(axis.text.x = element_blank())+
+  labs(title = "Sleep Duration for People with Insomnia", 
+       y = "Sleep Duration (Hours)")
+
+# then, use ggplot to generate a histogram of quality, as its a discrete variable
+histogram3 <- ggplot(data = quality) +
+  geom_histogram(mapping = aes(x=Quality.of.Sleep), 
+                 breaks = seq(from=3, to=10, by=1)) +
+  labs(title = "Sleep Quality for People with Insomnia",
+       x = "Subjective Sleep Quality", y = "Number of People")
+
+# From original data, find min, Q1, median, Q3, max of duration
+# also find the mean
+quart_duration <- quantile(duration$Sleep.Duration, probs = c(0,0.25,0.5,0.75,1))
+mean_duration <- mean(duration$Sleep.Duration)
+# find min, Q1, median, Q3, max of quality
+# also find the mean
+quart_quality <- quantile(quality$Quality.of.Sleep, probs = c(0,0.25,0.5,0.75,1)) 
+mean_quality <- mean(quality$Quality.of.Sleep)
+
+# annotate these numbers on the plot, and save to a png file
+png("Insomnia_Boxplot.png",  width = 10, height = 5, units = "in", res = 400)
+plot_insomnia <- plot3 + 
+  geom_text(aes(label = paste0("Mean (Hours): ", round(mean_duration,2))),
+            x = 0.15, y = 8.25) +
+  geom_text(aes(label = paste0("Maximum (Hours): " , quart_duration[5])), 
+            x = -0.25, y = 8.25) +
+  geom_text(aes(label = paste0("Quartile 3 (Hours): ", quart_duration[4])), 
+            x = -0.25, y = 8) +
+  geom_text(aes(label = paste0("Median (Hours): ", quart_duration[3])), 
+            x = -0.25, y = 7.75) +
+  geom_text(aes(label = paste0("Quartile 1 (Hours): ", quart_duration[2])), 
+            x = -0.25, y = 7.5) +
+  geom_text(aes(label = paste0("Minimum (Hours): ", quart_duration[1])), 
+            x = -0.25, y = 7.25)
+plot_insomnia
+dev.off()
+
+# annotate numbers on histogram and save to a png
+png("Insomnia_Histogram.png", width = 10, height = 5, units = "in", res = 400)
+histogram_insomnia <- histogram3 +
+  geom_text(aes(label = paste0("Mean: ", round(mean_quality,2))),
+            x = 3.5, y = 30) +
+  geom_text(aes(label = paste0("Maximum: " , quart_quality[5])), 
+            x = 3.5, y = 26) +
+  geom_text(aes(label = paste0("Quartile 3: ", quart_quality[4])), 
+            x = 3.5, y = 22) +
+  geom_text(aes(label = paste0("Median: ", quart_quality[3])), 
+            x = 3.5, y = 18) +
+  geom_text(aes(label = paste0("Quartile 1: ", quart_quality[2])), 
+            x = 3.5, y = 14) +
+  geom_text(aes(label = paste0("Minimum: ", quart_quality[1])), 
+            x = 3.5, y = 10)
+histogram_insomnia
+dev.off()
+
+##### COMPARISONS
+# side-by-side plot of sleep duration boxplots
+png('boxplot_summary.png', width = 10, height = 5, units = "in", res = 400)
+grid.arrange(plot1, plot2, plot3,ncol=3, nrow=1)
+dev.off()
+# side-by_side plot of sleep quality histograms
+png('histogram_summary.png', width = 10, height = 5, units = "in", res = 400)
+grid.arrange(histogram1, histogram2, histogram3,ncol=3, nrow=1)
+dev.off()
