@@ -47,9 +47,11 @@ grid.arrange(plt1, plt2, ncol=2, nrow=1)
 
 #BMI and Sleep Disorder
 sleep.bmi <- ggplot(data = sleep) +
-  geom_point(mapping = aes(x=sleep$BMI.Category, y=sleep$Sleep.Disorder)) +
+  geom_point(mapping = aes(x=BMI.Category, y=phys, color = Sleep.Disorder)) +
+  scale_color_viridis(discrete = TRUE, option = "plasma") +
   labs(title = "Relationship between BMI and Sleep Disorder",
-       x = "BMI Category", y="Sleep Disorder") + 
+       x = "BMI Category", y="Physical Activity (min)", color = "Sleep Disorder") + 
   theme_light()
+
 
 sleep.bmi
