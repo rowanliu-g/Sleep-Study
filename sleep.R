@@ -6,6 +6,7 @@ install.packages("tidyverse")
 
 library(tidyverse)
 library(viridis)
+library(viridisLite)
 library(ggplot2)
 library(gridExtra)
 
@@ -20,16 +21,18 @@ View(sleep)
 ##print(sleep, width = Inf)
 glimpse(sleep)
 
+##
+
 #### PLOT ####
 phys <- sleep[,c(7)]
 dur <- sleep[,c(5)]
 occup <- sleep[,c(4)]
 
 plt1 <- ggplot(data = sleep) + 
-  geom_point(mapping = aes(x= phys, y=dur, color= occup)) +
-  scale_color_viridis(discrete = TRUE, option = "turbo") +
-  labs(title = "Sleep and Exercise based on Occupation", x = "Physical Activity (min)",
-       y = "Sleep Duration (hr)", color = "Occupation") +
+  geom_point(mapping = aes(x= phys, y=dur)) +
+  stat_smooth(method = "loess", col='purple', linetype='dashed') +
+  labs(title = "Relationship between Sleep and Exercise", x = "Physical Activity (min)",
+       y = "Sleep Duration (hr)") +
   theme_gray()
 
 plt1
@@ -37,9 +40,10 @@ plt1
 plt2 <- ggplot(data = sleep) + 
   geom_point(mapping = aes(x= occup, y=dur, color= phys)) +
   scale_color_viridis(option = "turbo") +
-  labs(title = "Sample Plot", x = "Occupation",
+  labs(title = "Sleep and Exercise based on Occupation", x = "Occupation",
        y = "Sleep Duration (hr)", color = "Physical Activity (min)") +
-  theme_light()
+  theme_light() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 plt2
 
